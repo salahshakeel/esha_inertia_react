@@ -35,7 +35,10 @@ class StudentController extends Controller
     public function BookIndex(Student $student)
     {
         return Inertia::render('Students/BooksIndex',[
-            'books' => $student->borrows()->with(['student.books','student.books.categories'])->paginate(10)
+            'books' => $student->borrows()
+            ->with(['books', 'books.categories'])
+            ->latest()
+            ->paginate(10)
         ]);
     }
     /**

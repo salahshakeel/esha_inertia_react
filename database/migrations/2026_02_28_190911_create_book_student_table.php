@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('book_student', function (Blueprint $table) {
             $table->unsignedBigInteger('book_id');
             $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('borrow_id');
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('borrow_id')->references('id')->on('book_borrows')->onDelete('cascade');
         });
     }
 

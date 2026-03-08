@@ -28,6 +28,12 @@ class BookBorrow extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'book_student', 'borrow_id', 'book_id')
+            ->withPivot('student_id');
+    }
+
     
     
 }

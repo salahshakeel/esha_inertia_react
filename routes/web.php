@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use App\Models\Student;
+use App\Models\BookBorrow;
+use App\Models\Book;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -15,7 +17,22 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $counts = [
+        'students' => Student::count(),
+        'books' => Book::count(),
+        'borrows' => BookBorrow::count(),
+    ];
+    $recentBorrows = BookBorrow::with([
+                'student',
+                'books',
+                'books.categories'
+            ])
+            ->whereDate('borrowed_at', '>=', now()->subDays(7)) // Get borrows from the last 7 days
+            ->latest()->paginate(10);
+    return Inertia::render('Dashboard', [
+        'counts' => $counts,
+        'recentBorrows' => $recentBorrows,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

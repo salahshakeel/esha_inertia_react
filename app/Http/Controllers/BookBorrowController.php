@@ -16,7 +16,11 @@ class BookBorrowController extends Controller
     public function index()
     {
         return Inertia::render('Borrows/Index', [
-            'borrows' => BookBorrow::with(['student','student.books','student.books.categories'])->latest()->paginate(10),
+            'borrows' =>BookBorrow::with([
+                'student',
+                'books',
+                'books.categories'
+            ])->latest()->paginate(10),
         ]);
     }
 
@@ -53,7 +57,7 @@ class BookBorrowController extends Controller
     public function store(StoreBookBorrowRequest $request)
     {
         $student = Student::findOrFail($request->student_id);
-        $student->books()->attach($request->book_ids);
+       
         $borrow = BookBorrow::create([
             'student_id' => $request->student_id,
             'borrower_name' => $student->name,
@@ -64,6 +68,7 @@ class BookBorrowController extends Controller
             'book_author' => Book::whereIn('id', $request->book_ids)->pluck('author')->join(', '),
             'borrowed_at' => now(),
         ]);
+         $student->books()->attach($request->book_ids, ['borrow_id' => $borrow->id ]);
         return redirect()->route('dashboard.borrows.index')->with('success', 'Book borrow created successfully.');
     }
 
@@ -100,7 +105,7 @@ class BookBorrowController extends Controller
      */
     public function destroy(BookBorrow $borrow)
     {
-        $borrow->student->books()->detach();
+        $borrow->student->books()->wherePivot('borrow_id', $borrow->id)->detach();
         $borrow->delete();
         return redirect()->route('dashboard.borrows.index')->with('success', 'Book borrow deleted successfully.');
     }

@@ -7,7 +7,7 @@ import { Head, Link, router } from '@inertiajs/react'
 import React from 'react'
 
 const Index = ({ borrows}) => {
-
+    console.log(borrows);
     const handleDelete = (bookBorrow) => {
         if (confirm('Are you sure you want to delete this borrow?')) {
            router.delete(route('dashboard.borrows.destroy', bookBorrow.id));
@@ -126,11 +126,9 @@ const Index = ({ borrows}) => {
                                             <td class="px-4 py-3">{borrow.student_id}</td>
                                             <td class="px-4 py-3">{borrow.student.name}</td>
                                           <td className="px-4 py-3">
-<ul className="list-disc list-inside space-y-1">
+                                                <ul className="list-disc list-inside space-y-1">
 
-{[...new Map(borrow.student.books.map(book => [book.id, book])).values()]
-.map((book) => (
-
+                                                {borrow.books.map((book) => (
 <li key={book.id}>
 <strong>{book.title}</strong> (Author: {book.author})
 <br />
@@ -140,11 +138,10 @@ Categories: {book.categories.map((category) => category.name).join(', ')}
 </span>
 
 </li>
-
 ))}
 
-</ul>
-</td>
+                                                </ul>
+                                                </td>
                         
                                             <td class="px-4 py-3">{new Date(borrow.borrowed_at).toLocaleDateString()}</td>
                                             <td class="px-4 py-3">{borrow.returned_at ? new Date(borrow.returned_at).toLocaleDateString() : 'Not returned'}</td>

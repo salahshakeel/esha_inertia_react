@@ -10,9 +10,13 @@ const BookIndex = ({books}) => {
     console.log(books);
   return (
     <AuthenticatedLayout
-        header={<h1 className="font-semibold text-xl text-gray-800">Student Books Total Borrow {
-            books.data[0]?.student.books.length || 0 }
-         </h1>}
+       header={
+<h1 className="font-semibold text-xl text-gray-800">
+Student Books Total Borrow {
+books.data.reduce((total, borrow) => total + borrow.books.length, 0)
+}
+</h1>
+}
     >
         <Head title="Books" />
           <div>
@@ -105,17 +109,12 @@ const BookIndex = ({books}) => {
                                      
                                     </tr>
                                 </thead>
-                               <tbody>
-                                    {books.data.map((borrow, index) => {
+                              <tbody>
+                                    {books.data.map((borrow) => {
 
-                                    const uniqueBooks = [...new Map(
-                                        borrow.student.books.map(book => [book.id, book])
-                                    ).values()];
+                                    return borrow.books.map((book) => (
 
-                                    return uniqueBooks.map((book, bookIndex) => (
                                     <tr key={book.id} className="border-b dark:border-gray-700">
-
-                                  
 
                                     <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {book.title}
@@ -149,7 +148,9 @@ const BookIndex = ({books}) => {
                                     </td>
 
                                     </tr>
+
                                     ))
+
                                     })}
                                     </tbody>
                             </table>
