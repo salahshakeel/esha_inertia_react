@@ -118,7 +118,7 @@ const Index = ({book_categories}) => {
                                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{category.name}</th>
                                           
                                             <td class="px-4 py-3 flex items-center justify-end">
-                                                <Link href={route('dashboard.categories.books', category)}>
+                                                <Link href={route('dashboard.book_categories.books', category)}>
                                                 <SecondaryButton className="mr-2">
                                                     View Books
                                                 </SecondaryButton>

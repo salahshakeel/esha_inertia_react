@@ -5,9 +5,13 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
  import { ToastContainer, toast } from 'react-toastify';
+ import { ChevronRightIcon, HomeIcon } from "@heroicons/react/24/solid";
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const flash = usePage().props.flash;
+    const breadcrumbs = usePage().props.breadcrumbs;
+
+    console.log('Breadcrumbs:', breadcrumbs);
 
 
     useEffect(() => {        
@@ -198,6 +202,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 </div>
             </nav>
 
+
             {header && (
                 <header className="bg-white shadow">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -205,6 +210,47 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </header>
             )}
+         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-6">
+            <ol className="flex items-center flex-wrap text-sm text-gray-500">
+
+                {/* Home */}
+                <li className="flex items-center">
+                    <Link
+                        href="/"
+                        className="flex items-center gap-1 hover:text-gray-900 transition-colors"
+                    >
+                        <HomeIcon className="h-4 w-4" />
+                        Home
+                    </Link>
+                </li>
+
+                {breadcrumbs.map((crumb, index) => {
+                    const isLast = index === breadcrumbs.length - 1;
+
+                    return (
+                        <li key={index} className="flex items-center">
+
+                            {/* Separator */}
+                            <ChevronRightIcon className="h-4 w-4 mx-2 text-gray-400" />
+
+                            {isLast ? (
+                                <span className="font-semibold text-gray-900">
+                                    {crumb.label}
+                                </span>
+                            ) : (
+                                <Link
+                                    href={route(crumb.route)}
+                                    className="hover:text-blue-600 transition-colors"
+                                >
+                                    {crumb.label}
+                                </Link>
+                            )}
+                        </li>
+                    );
+                })}
+            </ol>
+        </nav>
+            
 
             <main>{children}</main>
         </div>

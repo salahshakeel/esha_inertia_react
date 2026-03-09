@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-
+use App\Services\BreadcrumbService;
+use Illuminate\Support\Facades\Route;
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -29,6 +30,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $routeName = Route::currentRouteName();
         return [
             ...parent::share($request),
             'auth' => [
@@ -38,6 +40,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => session('success'),
                 'error' => session('error'),
             ],
+            'breadcrumbs' => BreadcrumbService::generate($routeName),
         ];
     }
 }
