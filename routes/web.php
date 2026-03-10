@@ -46,3 +46,4 @@ require __DIR__.'/dashboard/students.php';
 require __DIR__.'/dashboard/books.php';
 require __DIR__.'/dashboard/book_categories.php';
 require __DIR__.'/dashboard/book_borrows.php';
+require __DIR__.'/dashboard/notifications.php';

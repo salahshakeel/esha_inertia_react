@@ -69,6 +69,7 @@ class BookBorrowController extends Controller
             'borrowed_at' => now(),
         ]);
          $student->books()->attach($request->book_ids, ['borrow_id' => $borrow->id ]);
+         $borrow->notify(new \App\Notifications\BorrowStatusNotification($borrow,$student));
         return redirect()->route('dashboard.borrows.index')->with('success', 'Book borrow created successfully.');
     }
 
@@ -97,6 +98,7 @@ class BookBorrowController extends Controller
             'is_returned' => true,
             'returned_at' => now(),
         ]);
+        $borrow->notify(new \App\Notifications\BorrowStatusNotification($borrow,  $borrow->student));
         return redirect()->route('dashboard.borrows.index')->with('success', 'Book borrow updated successfully.');
     }
 

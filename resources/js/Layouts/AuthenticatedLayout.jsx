@@ -70,6 +70,13 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Borrows
                                 </NavLink>
+                                   <NavLink
+                                    href={route('dashboard.notifications.index')}
+                                    active={route().current('dashboard.notifications.index')}
+                                >
+                                    Notifications
+                                </NavLink>
+                                
                             </div>
                         </div>
 
