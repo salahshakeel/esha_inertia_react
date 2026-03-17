@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Http\Requests\StoreBookBorrowRequest;
 use App\Http\Requests\UpdateBookBorrowRequest;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Notification;
 class BookBorrowController extends Controller
 {
     /**
@@ -69,7 +70,9 @@ class BookBorrowController extends Controller
             'borrowed_at' => now(),
         ]);
          $student->books()->attach($request->book_ids, ['borrow_id' => $borrow->id ]);
-         $borrow->notify(new \App\Notifications\BorrowStatusNotification($borrow,$student));
+        // $borrow->notify(new \App\Notifications\BorrowStatusNotification($borrow,$student));
+        Notification::route('mail', 'salahshakeel0@gmail.com')
+        ->notify(new \App\Notifications\BorrowStatusNotification($borrow, $student));
         return redirect()->route('dashboard.borrows.index')->with('success', 'Book borrow created successfully.');
     }
 
@@ -98,7 +101,9 @@ class BookBorrowController extends Controller
             'is_returned' => true,
             'returned_at' => now(),
         ]);
-        $borrow->notify(new \App\Notifications\BorrowStatusNotification($borrow,  $borrow->student));
+       // $borrow->notify(new \App\Notifications\BorrowStatusNotification($borrow,  $borrow->student));
+       Notification::route('mail', 'salahshakeel0@gmail.com')
+        ->notify(new \App\Notifications\BorrowStatusNotification($borrow, $borrow->student));
         return redirect()->route('dashboard.borrows.index')->with('success', 'Book borrow updated successfully.');
     }
 
