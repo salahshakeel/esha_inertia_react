@@ -76,6 +76,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Notifications
                                 </NavLink>
+                                 <NavLink
+                                    href={route('dashboard.messages.index')}
+                                    active={route().current('dashboard.messages.index')}
+                                >
+                                    Messages
+                                </NavLink>
                                 
                             </div>
                         </div>

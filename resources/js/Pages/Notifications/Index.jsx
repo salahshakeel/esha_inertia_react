@@ -4,8 +4,9 @@ import React from 'react'
 import moment from 'moment'
 import { Pagination } from '@/Components/Pagination'
 const Index = ({ notifications }) => {
-
+console.log(notifications)
   const items = notifications.data
+
 
   const updateNotification = (notification) => {
     router.put(route('dashboard.notifications.update', notification.id))
@@ -60,19 +61,36 @@ const Index = ({ notifications }) => {
                   >
                     {/* Icon */}
                     <div className="flex-shrink-0">
-                      <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                        📚
-                      </div>
+                  {data.message === 'New Message' ? (
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                    📧
+                    </div>
+                  ): (
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                      📚
+                    </div>
+                  )}
+                    
                     </div>
 
                     {/* Content */}
                     <div className="flex-1">
                       <p className="font-medium text-gray-800">
-                        {data.book_title} - {data.status}
+                        {data.message === "New Message" ?
+                        
+                        data.message
+                        :
+                           <> {data.book_title} - {data.status} </>     
+                        }
+
+                      
                       </p>
 
                       <p className="text-sm text-gray-600">
-                        Borrow ID: {data.borrow_id} | Student Name: {data.student_name}
+                          {data.message === "New Message" ?
+                               <> Name: {data.name} | Email: {data.email} <br/> Message: {data.message} </>
+                          : <>
+                        Borrow ID: {data.borrow_id} | Student Name: {data.student_name} </> }
                       </p>
 
                       <span className="text-xs text-gray-400">
